@@ -1,6 +1,6 @@
 <?php
 
-namespace WHMCS\Module\Registrar\Registrarmodule;
+namespace WHMCS\Module\Registrar\Metunic;
 
 /**
  * Sample Registrar Module Simple API Client.
@@ -43,7 +43,7 @@ class ApiClient
         $this->results = $this->processResponse($response);
 
         logModuleCall(
-            'Registrarmodule',
+            'Metunic',
             $action,
             $postfields,
             $response,

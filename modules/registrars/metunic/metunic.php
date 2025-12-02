@@ -16,8 +16,8 @@
  *
  * Within the module itself, all functions must be prefixed with the module
  * filename, followed by an underscore, and then the function name. For
- * example this file, the filename is "registrarmodule.php" and therefore all
- * function begin "registrarmodule_".
+ * example this file, the filename is "metunic.php" and therefore all
+ * function begin "metunic_".
  *
  * If your module or third party API does not support a given function, you
  * should not define the function within your module. WHMCS recommends that
@@ -38,7 +38,7 @@ if (!defined("WHMCS")) {
 
 use WHMCS\Domains\DomainLookup\ResultsList;
 use WHMCS\Domains\DomainLookup\SearchResult;
-use WHMCS\Module\Registrar\Registrarmodule\ApiClient;
+use WHMCS\Module\Registrar\Metunic\ApiClient;
 
 // Require any libraries needed for the module to function.
 // require_once __DIR__ . '/path/to/library/loader.php';
@@ -53,7 +53,7 @@ use WHMCS\Module\Registrar\Registrarmodule\ApiClient;
  *
  * @return array
  */
-function registrarmodule_MetaData()
+function metunic_MetaData()
 {
     return array(
         'DisplayName' => 'Sample Registrar Module for WHMCS',
@@ -79,7 +79,7 @@ function registrarmodule_MetaData()
  *
  * @return array
  */
-function registrarmodule_getConfigArray()
+function metunic_getConfigArray()
 {
     return [
         // Friendly display name for the module
@@ -154,7 +154,7 @@ function registrarmodule_getConfigArray()
  *
  * @return array
  */
-function registrarmodule_RegisterDomain($params)
+function metunic_RegisterDomain($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -319,7 +319,7 @@ function registrarmodule_RegisterDomain($params)
  *
  * @return array
  */
-function registrarmodule_TransferDomain($params)
+function metunic_TransferDomain($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -482,7 +482,7 @@ function registrarmodule_TransferDomain($params)
  *
  * @return array
  */
-function registrarmodule_RenewDomain($params)
+function metunic_RenewDomain($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -551,7 +551,7 @@ function registrarmodule_RenewDomain($params)
  *
  * @return array
  */
-function registrarmodule_GetNameservers($params)
+function metunic_GetNameservers($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -604,7 +604,7 @@ function registrarmodule_GetNameservers($params)
  *
  * @return array
  */
-function registrarmodule_SaveNameservers($params)
+function metunic_SaveNameservers($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -664,7 +664,7 @@ function registrarmodule_SaveNameservers($params)
  *
  * @return array
  */
-function registrarmodule_GetContactDetails($params)
+function metunic_GetContactDetails($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -769,7 +769,7 @@ function registrarmodule_GetContactDetails($params)
  *
  * @return array
  */
-function registrarmodule_SaveContactDetails($params)
+function metunic_SaveContactDetails($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -854,7 +854,7 @@ function registrarmodule_SaveContactDetails($params)
  *
  * @return \WHMCS\Domains\DomainLookup\ResultsList An ArrayObject based collection of \WHMCS\Domains\DomainLookup\SearchResult results
  */
-function registrarmodule_CheckAvailability($params)
+function metunic_CheckAvailability($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -938,7 +938,7 @@ function registrarmodule_CheckAvailability($params)
  *
  * @return array of Configuration Options
  */
-function registrarmodule_DomainSuggestionOptions() {
+function metunic_DomainSuggestionOptions() {
     return array(
         'includeCCTlds' => array(
             'FriendlyName' => 'Include Country Level TLDs',
@@ -963,7 +963,7 @@ function registrarmodule_DomainSuggestionOptions() {
  *
  * @return \WHMCS\Domains\DomainLookup\ResultsList An ArrayObject based collection of \WHMCS\Domains\DomainLookup\SearchResult results
  */
-function registrarmodule_GetDomainSuggestions($params)
+function metunic_GetDomainSuggestions($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1044,7 +1044,7 @@ function registrarmodule_GetDomainSuggestions($params)
  *
  * @return string|array Lock status or error message
  */
-function registrarmodule_GetRegistrarLock($params)
+function metunic_GetRegistrarLock($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1092,7 +1092,7 @@ function registrarmodule_GetRegistrarLock($params)
  *
  * @return array
  */
-function registrarmodule_SaveRegistrarLock($params)
+function metunic_SaveRegistrarLock($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1141,7 +1141,7 @@ function registrarmodule_SaveRegistrarLock($params)
  *
  * @return array DNS Host Records
  */
-function registrarmodule_GetDNS($params)
+function metunic_GetDNS($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1193,7 +1193,7 @@ function registrarmodule_GetDNS($params)
  *
  * @return array
  */
-function registrarmodule_SaveDNS($params)
+function metunic_SaveDNS($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1242,7 +1242,7 @@ function registrarmodule_SaveDNS($params)
  *
  * @return array
  */
-function registrarmodule_IDProtectToggle($params)
+function metunic_IDProtectToggle($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1299,7 +1299,7 @@ function registrarmodule_IDProtectToggle($params)
  * @return array
  *
  */
-function registrarmodule_GetEPPCode($params)
+function metunic_GetEPPCode($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1355,7 +1355,7 @@ function registrarmodule_GetEPPCode($params)
  *
  * @return array
  */
-function registrarmodule_ReleaseDomain($params)
+function metunic_ReleaseDomain($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1404,7 +1404,7 @@ function registrarmodule_ReleaseDomain($params)
  *
  * @return array
  */
-function registrarmodule_RequestDelete($params)
+function metunic_RequestDelete($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1451,7 +1451,7 @@ function registrarmodule_RequestDelete($params)
  *
  * @return array
  */
-function registrarmodule_RegisterNameserver($params)
+function metunic_RegisterNameserver($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1504,7 +1504,7 @@ function registrarmodule_RegisterNameserver($params)
  *
  * @return array
  */
-function registrarmodule_ModifyNameserver($params)
+function metunic_ModifyNameserver($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1557,7 +1557,7 @@ function registrarmodule_ModifyNameserver($params)
  *
  * @return array
  */
-function registrarmodule_DeleteNameserver($params)
+function metunic_DeleteNameserver($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1610,7 +1610,7 @@ function registrarmodule_DeleteNameserver($params)
  *
  * @return array
  */
-function registrarmodule_Sync($params)
+function metunic_Sync($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1660,7 +1660,7 @@ function registrarmodule_Sync($params)
  *
  * @return array
  */
-function registrarmodule_TransferSync($params)
+function metunic_TransferSync($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1712,11 +1712,11 @@ function registrarmodule_TransferSync($params)
  *
  * Allows you to define additional actions your module supports.
  * In this example, we register a Push Domain action which triggers
- * the `registrarmodule_push` function when invoked.
+ * the `metunic_push` function when invoked.
  *
  * @return array
  */
-function registrarmodule_ClientAreaCustomButtonArray()
+function metunic_ClientAreaCustomButtonArray()
 {
     return array(
         'Push Domain' => 'push',
@@ -1731,7 +1731,7 @@ function registrarmodule_ClientAreaCustomButtonArray()
  *
  * @return array
  */
-function registrarmodule_ClientAreaAllowedFunctions()
+function metunic_ClientAreaAllowedFunctions()
 {
     return array(
         'Push Domain' => 'push',
@@ -1747,7 +1747,7 @@ function registrarmodule_ClientAreaAllowedFunctions()
  *
  * @return array
  */
-function registrarmodule_push($params)
+function metunic_push($params)
 {
     // user defined configuration values
     $userIdentifier = $params['APIUsername'];
@@ -1777,7 +1777,7 @@ function registrarmodule_push($params)
  *
  * @return string HTML Output
  */
-function registrarmodule_ClientArea($params)
+function metunic_ClientArea($params)
 {
     $output = '
         <div class="alert alert-info">

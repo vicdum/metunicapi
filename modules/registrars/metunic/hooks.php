@@ -1,6 +1,6 @@
 <?php
 /**
- * WHMCS SDK Sample Registrar Module Hooks File
+ * WHMCS SDK Metunic Registrar Module Hooks File
  *
  * Hooks allow you to tie into events that occur within the WHMCS application.
  *
@@ -32,17 +32,17 @@
  * add_hook(string $hookPointName, int $priority, string|array|Closure $function)
  */
 add_hook('AdminHomeWidgets', 1, function() {
-    return new SampleRegistrarModuleWidget();
+    return new MetunicRegistrarModuleWidget();
 });
 
 /**
- * Sample Registrar Module Admin Dashboard Widget.
+ * Metunic Registrar Module Admin Dashboard Widget.
  *
  * @see https://developers.whmcs.com/addon-modules/admin-dashboard-widgets/
  */
-class SampleRegistrarModuleWidget extends \WHMCS\Module\AbstractWidget
+class MetunicRegistrarModuleWidget extends \WHMCS\Module\AbstractWidget
 {
-    protected $title = 'Sample Registrar Module';
+    protected $title = 'Metunic Registrar Module';
     protected $description = '';
     protected $weight = 150;
     protected $columns = 1;

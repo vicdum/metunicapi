@@ -29,7 +29,7 @@ load and potentially slower page load times.
  *
  * @return string HTML Output
  */
-function registrarmodule_ClientArea($params)
+function metunic_ClientArea($params)
 {
     $output = <<<HTML
 <div class="alert alert-info">

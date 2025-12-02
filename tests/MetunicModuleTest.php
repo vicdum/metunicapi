@@ -14,7 +14,7 @@
  * @license http://www.whmcs.com/license/ WHMCS Eula
  */
 
-class  WHMCSSampleRegistrarModuleTest extends PHPUnit_Framework_TestCase
+class  MetunicModuleTest extends PHPUnit_Framework_TestCase
 {
 
     public static function providerCoreFunctionNames()
@@ -42,6 +42,6 @@ class  WHMCSSampleRegistrarModuleTest extends PHPUnit_Framework_TestCase
      */
     public function testCoreModuleFunctionsExist($moduleName)
     {
-        $this->assertTrue(function_exists('registrarmodule_' . $moduleName));
+        $this->assertTrue(function_exists('metunic_' . $moduleName));
     }
 }
