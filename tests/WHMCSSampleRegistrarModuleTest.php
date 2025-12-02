@@ -42,6 +42,6 @@ class  WHMCSSampleRegistrarModuleTest extends PHPUnit_Framework_TestCase
      */
     public function testCoreModuleFunctionsExist($moduleName)
     {
-        $this->assertTrue(function_exists('metunicapi_' . $moduleName));
+        $this->assertTrue(function_exists('registrarmodule_' . $moduleName));
     }
 }
