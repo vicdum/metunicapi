@@ -23,7 +23,11 @@ function metunic_getConfigArray()
     return array(
         "FriendlyName" => array(
             "Type" => "System",
-            "Value" => "METUnic Registrar",
+            "Value" => "METUnic",
+        ),
+        "Description" => array(
+            "Type" => "System",
+            "Value" => "METUnic API ile domain işlemlerinizi yönetin.",
         ),
         "username" => array(
             "FriendlyName" => "Bayi Kodu (Kullanıcı Adı)",
