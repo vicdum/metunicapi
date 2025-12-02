@@ -1,36 +1,4 @@
 <?php
-/**
- * WHMCS SDK Sample Registrar Module
- *
- * Registrar Modules allow you to create modules that allow for domain
- * registration, management, transfers, and other functionality within
- * WHMCS.
- *
- * This sample file demonstrates how a registrar module for WHMCS should
- * be structured and exercises supported functionality.
- *
- * Registrar Modules are stored in a unique directory within the
- * modules/registrars/ directory that matches the module's unique name.
- * This name should be all lowercase, containing only letters and numbers,
- * and always start with a letter.
- *
- * Within the module itself, all functions must be prefixed with the module
- * filename, followed by an underscore, and then the function name. For
- * example this file, the filename is "metunic.php" and therefore all
- * function begin "metunic_".
- *
- * If your module or third party API does not support a given function, you
- * should not define the function within your module. WHMCS recommends that
- * all registrar modules implement Register, Transfer, Renew, GetNameservers,
- * SaveNameservers, GetContactDetails & SaveContactDetails.
- *
- * For more information, please refer to the online documentation.
- *
- * @see https://developers.whmcs.com/domain-registrars/
- *
- * @copyright Copyright (c) WHMCS Limited 2017
- * @license https://www.whmcs.com/license/ WHMCS Eula
- */
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
@@ -39,103 +7,90 @@ if (!defined("WHMCS")) {
 use WHMCS\Domains\DomainLookup\ResultsList;
 use WHMCS\Domains\DomainLookup\SearchResult;
 use WHMCS\Module\Registrar\Metunic\ApiClient;
+use WHMCS\Exception\Module\InvalidConfiguration;
 
-// Require any libraries needed for the module to function.
-// require_once __DIR__ . '/path/to/library/loader.php';
-//
-// Also, perform any initialization required by the service's library.
 
-/**
- * Define module related metadata
- *
- * Provide some module information including the display name and API Version to
- * determine the method of decoding the input values.
- *
- * @return array
- */
 function metunic_MetaData()
 {
     return array(
-        'DisplayName' => 'Sample Registrar Module for WHMCS',
-        'APIVersion' => '1.1',
+        'DisplayName' => 'METUnic Registrar',
+        'APIVersion' => '1.4.3',
     );
 }
 
-/**
- * Define registrar configuration options.
- *
- * The values you return here define what configuration options
- * we store for the module. These values are made available to
- * each module function.
- *
- * You can store an unlimited number of configuration settings.
- * The following field types are supported:
- *  * Text
- *  * Password
- *  * Yes/No Checkboxes
- *  * Dropdown Menus
- *  * Radio Buttons
- *  * Text Areas
- *
- * @return array
- */
 function metunic_getConfigArray()
 {
-    return [
-        // Friendly display name for the module
-        'FriendlyName' => [
-            'Type' => 'System',
-            'Value' => 'Sample Registrar Module for WHMCS',
-        ],
-        // a text field type allows for single line text input
-        'APIUsername' => [
-            'FriendlyName' => 'API Username',
-            'Type' => 'text',
-            'Size' => '25',
-            'Default' => '1024',
-            'Description' => 'Enter in megabytes',
-        ],
-        // a password field type allows for masked text input
-        'APIKey' => [
-            'FriendlyName' => 'API Password',
-            'Type' => 'password',
-            'Size' => '25',
-            'Default' => '',
-            'Description' => 'Enter secret value here',
-        ],
-        // the yesno field type displays a single checkbox option
-        'TestMode' => [
-            'FriendlyName' => 'Test Mode',
-            'Type' => 'yesno',
-            'Description' => 'Tick to enable',
-        ],
-        // the dropdown field type renders a select menu of options
-        'AccountMode' => [
-            'FriendlyName' => 'Account Mode',
-            'Type' => 'dropdown',
-            'Options' => [
-                'option1' => 'Display Value 1',
-                'option2' => 'Second Option',
-                'option3' => 'Another Option',
-            ],
-            'Description' => 'Choose one',
-        ],
-        // the radio field type displays a series of radio button options
-        'EmailPreference' => [
-            'FriendlyName' => 'Email Preference',
-            'Type' => 'radio',
-            'Options' => 'First Option,Second Option,Third Option',
-            'Description' => 'Choose your preference',
-        ],
-        // the textarea field type allows for multi-line text input
-        'Email' => [
-            'FriendlyName' => 'Email',
-            'Type' => 'textarea',
-            'Rows' => '3',
-            'Cols' => '60',
-            'Description' => 'Freeform multi-line text input field',
-        ],
+    return array(
+        "FriendlyName" => array(
+            "Type" => "System",
+            "Value" => "METUnic Registrar",
+        ),
+        "username" => array(
+            "FriendlyName" => "Bayi Kodu (Kullanıcı Adı)",
+            "Type" => "text",
+            "Size" => "25",
+            "Description" => "METUnic API kullanıcı adınız.",
+            "Default" => "",
+        ),
+        "password" => array(
+            "FriendlyName" => "Parola",
+            "Type" => "password",
+            "Size" => "25",
+            "Description" => "METUnic API parolanız.",
+            "Default" => "",
+        ),
+        "testmode" => array(
+            "FriendlyName" => "Test Modu",
+            "Type" => "yesno",
+            "Description" => "İşlemleri test ortamında (api-test.metunic.com.tr) yapmak için işaretleyin.",
+        ),
+    );
+}
+
+function metunic_config_validate($params)
+{
+    // 1. Ortam URL'ini belirle
+    $url = $params['testmode'] 
+        ? 'https://api-test.metunic.com.tr/v1/login/auth' 
+        : 'https://api.metunic.com.tr/v1/login/auth'; // Canlı URL varsayımı
+
+    // 2. API'ye gönderilecek veriler
+    $postFields = [
+        'username' => $params['username'],
+        'password' => $params['password'],
     ];
+
+    // 3. CURL İsteği (Basit kontrol için)
+    $ch = curl_init();
+    // API POST bekliyor ancak parametreleri query string olarak da alabiliyor,
+    // dokümandaki "in: query" ifadesine istinaden URL'e ekliyoruz.
+    $queryUrl = $url . '?' . http_build_query($postFields);
+    
+    curl_setopt($ch, CURLOPT_URL, $queryUrl);
+    curl_setopt($ch, CURLOPT_POST, 1); // POST Metodu
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Geliştirme ortamı için
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    
+    // Cookie yönetimi bu adımda sadece login testi olduğu için gerekli değil,
+    // ancak dönen cevabı analiz etmek şart.
+    
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    curl_close($ch);
+
+    if ($error) {
+        throw new InvalidConfiguration('API Bağlantı Hatası: ' . $error);
+    }
+
+    $result = json_decode($response, true);
+
+    // 4. API Cevabını Kontrol Et
+    // Hata Kodu 1: İşlem Başarılıdır
+    if (!isset($result['messageCode']) || $result['messageCode'] !== 1) {
+        $msg = isset($result['messageText']) ? $result['messageText'] : 'Bilinmeyen hata';
+        throw new InvalidConfiguration('API Doğrulama Başarısız: ' . $msg);
+    }
 }
 
 /**
