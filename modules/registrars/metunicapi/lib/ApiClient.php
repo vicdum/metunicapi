@@ -18,11 +18,16 @@ class ApiClient
 
     public function ensureAuthenticated($username, $password)
     {
-        $check = $this->request('GET', 'session/check');
+        // Use http directly to avoid infinite loop if call uses ensureAuthenticated
+        $checkResponse = $this->http('GET', 'session/check');
+        $check = $this->processResponse($checkResponse);
+
         if (is_array($check) && isset($check['valid']) && $check['valid'] === true) {
             return;
         }
-        $this->request('POST', 'login/auth', array(
+
+        // If not valid, login.
+        $this->http('POST', 'login/auth', array(
             'username' => $username,
             'password' => $password,
         ));
@@ -72,11 +77,16 @@ class ApiClient
         curl_setopt($ch, CURLOPT_TIMEOUT, 100);
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookieJar);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookieJar);
+
         $method = strtoupper($method);
         if ($method === 'POST' || $method === 'PUT' || $method === 'DELETE') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
             if ($body !== null) {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+                // If body is JSON, set header
+                if (is_string($body) && (strpos($body, '{') === 0 || strpos($body, '[') === 0)) {
+                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                }
             } elseif (!empty($params) && $method !== 'GET') {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
             }
@@ -114,6 +124,47 @@ class ApiClient
             return $res['id'];
         }
         throw new \Exception('Service not found for domain');
+    }
+
+    public function getTrCountryId($code, $auth)
+    {
+        // $code is ISO-2 (e.g., TR)
+        // Need to fetch list and find ID.
+        // Caching could be done here, but for now simple lookup.
+        $res = $this->call('GET', 'lookup/tr/countries', array(), null, $auth);
+
+        // Assuming response structure: list of {id: 215, name: "Türkiye", code: "TR"} or similar.
+        // If not standard structure, we guess.
+        $list = isset($res['countries']) ? $res['countries'] : (isset($res['data']) ? $res['data'] : $res);
+
+        if (is_array($list)) {
+            foreach ($list as $c) {
+                // Check multiple fields
+                $cCode = isset($c['code']) ? $c['code'] : (isset($c['alpha2']) ? $c['alpha2'] : '');
+                if (strtoupper($cCode) === strtoupper($code)) {
+                    return isset($c['id']) ? $c['id'] : null;
+                }
+            }
+        }
+        return null;
+    }
+
+    public function getTrCityId($countryId, $cityName, $auth)
+    {
+        // Need to fetch list for countryId.
+        $res = $this->call('GET', 'lookup/tr/states/' . $countryId, array(), null, $auth);
+        $list = isset($res['states']) ? $res['states'] : (isset($res['data']) ? $res['data'] : $res);
+
+        if (is_array($list)) {
+            foreach ($list as $s) {
+                 $sName = isset($s['name']) ? $s['name'] : '';
+                 // Simple loose comparison
+                 if (mb_strtolower($sName, 'UTF-8') === mb_strtolower($cityName, 'UTF-8')) {
+                     return isset($s['id']) ? $s['id'] : null;
+                 }
+            }
+        }
+        return null;
     }
 
     public function formatPhoneE164($phone)
