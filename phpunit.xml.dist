@@ -6,7 +6,7 @@
     cacheTokens="false"
 >
     <testsuites>
-        <testsuite name="WHMCS Metunic Registrar Module Tests">
+        <testsuite name="WHMCS Sample Registrar Module Tests">
             <directory suffix=".php">./tests/</directory>
         </testsuite>
     </testsuites>

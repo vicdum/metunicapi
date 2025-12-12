@@ -1,8 +1,8 @@
-# Metunic Metunic Registrar Module #
+# WHMCS Sample Registrar Module #
 
 ## Summary ##
 
-Metunic Registrar Modules allow you to create modules that allow for the
+Registrar Modules allow you to create modules that allow for the
 registration and management of domain names in WHMCS.
 
 The sample files here demonstrates how a registrar module for WHMCS should
@@ -23,11 +23,11 @@ git clone git@github.com:WHMCS/sample-registrar-module.git
 Rename the module directory and file to your desired module name:
 
 ```bash
-mv modules/registrars/metunic/metunic.php modules/registrars/metunic/newmodule.php
-mv modules/registrars/metunic/ modules/registrars/newmodule/
+mv modules/registrars/registrarmodule/registrarmodule.php modules/registrars/registrarmodule/newmodule.php
+mv modules/registrars/registrarmodule/ modules/registrars/newmodule/
 ```
 
-Open the newmodule.php file and replace all occurencies of `metunic_` with the new name, in this instance `newmodule_`.
+Open the newmodule.php file and replace all occurencies of `registrarmodule_` with the new name, in this instance `newmodule_`.
 
 Login to the WHMCS Admin Area and navigate to Setup > Products > Domain Registrars to activate.
 
@@ -36,13 +36,13 @@ Login to the WHMCS Admin Area and navigate to Setup > Products > Domain Registra
 The recommended structure of a registrar module is as follows.
 
 ```
- metunic/
+ registrarmodule/
   |- lib/
   |- templates/
   |- tests/
   |  hooks.php
   |  logo.png
-  |  metunic.php
+  |  registrarmodule.php
 ```
 
 ## Minimum Requirements ##

@@ -1,6 +1,6 @@
 {
-    "name": "whmcs/metunic-registrar-module",
-    "description": "Metunic Registrar Module for WHMCS Billing Automation Platform",
+    "name": "whmcs/sample-registrar-module",
+    "description": "Sample Registrar Module for WHMCS Billing Automation Platform",
     "keywords": [
         "whmcs",
         "web host automation platform",
